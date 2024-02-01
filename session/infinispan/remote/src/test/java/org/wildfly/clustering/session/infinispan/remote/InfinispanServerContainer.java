@@ -6,6 +6,7 @@
 package org.wildfly.clustering.session.infinispan.remote;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -45,7 +46,9 @@ public class InfinispanServerContainer extends GenericContainer<InfinispanServer
 		if (OS_TYPES_SUPPORTING_HOST_NETWORK_MODE.contains(info.getOsType())) {
 			this.setNetworkMode(HOST_NETWORK_MODE);
 		} else {
-			this.setExposedPorts(java.util.List.of(HOTROD_PORT));
+//			this.setPortBindings(Collections.singletonList(String.valueOf(HOTROD_PORT)));
+			this.setNetworkMode("bridge");
+			this.setPortBindings(Collections.singletonList(String.format("%s:%s", HOTROD_PORT, HOTROD_PORT)));
 		}
 		this.setHostAccessible(true);
 		this.withLogConsumer(this);
